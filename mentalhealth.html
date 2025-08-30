@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GAD-7 Anxiety Test</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+      }
+      .container {
+        max-width: 700px;
+        width: 98%;
+        background: rgba(255, 255, 255, 0.98);
+        padding: 0 0 30px 0;
+        border-radius: 28px;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18);
+        animation: fadeIn 1s ease-in-out;
+        position: relative;
+        margin: 32px 0;
+      }
+      .header {
+        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
+        border-radius: 28px 28px 0 0;
+        padding: 32px 0 18px 0;
+        text-align: center;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(0, 123, 255, 0.08);
+        position: relative;
+      }
+      .header i {
+        font-size: 48px;
+        margin-bottom: 8px;
+        color: #fff;
+        filter: drop-shadow(0 2px 8px #007bff88);
+      }
+      .header h2 {
+        margin: 0;
+        font-size: 36px;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        text-shadow: 0 2px 8px #007bff33;
+      }
+      .header .subtitle {
+        font-size: 17px;
+        opacity: 0.92;
+        margin-top: 7px;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+      }
+      .header .svg-anim {
+        margin-top: 18px;
+        margin-bottom: -10px;
+      }
+      .progress-bar {
+        width: 90%;
+        margin: 0 auto 22px auto;
+        background: #e3e9f7;
+        border-radius: 8px;
+        height: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px #e3e9f7;
+      }
+      .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
+        width: 0%;
+        border-radius: 8px;
+        transition: width 0.4s cubic-bezier(0.4, 2, 0.6, 1);
+      }
+      form {
+        width: 90%;
+        margin: 0 auto;
+      }
+      .input-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        background: #f8f9ff;
+        padding: 12px 18px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #e3e9f7;
+      }
+      .input-row label {
+        font-weight: 600;
+        color: #007bff;
+        font-size: 17px;
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+      }
+      .input-row input[type="text"] {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1.5px solid #b3c6ff;
+        font-size: 17px;
+        width: 60%;
+        outline: none;
+        transition: border 0.2s;
+      }
+      .input-row input[type="text"]:focus {
+        border: 1.5px solid #007bff;
+        background: #eaf4ff;
+      }
+      .question {
+        margin: 28px 0;
+        padding: 22px 22px 16px 22px;
+        background: #f8f9ff;
+        border-radius: 18px;
+        box-shadow: 0 2px 12px #e3e9f7;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        border-left: 6px solid #74ebd5;
+        animation: fadeInUp 0.7s;
+      }
+      .question:hover {
+        transform: scale(1.02);
+        background: #eef3ff;
+        box-shadow: 0 4px 20px #dbeafe;
+      }
+      .question p {
+        margin: 0 0 14px;
+        font-weight: bold;
+        color: #2d3a4a;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: #f1f1f1;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 17px;
+        font-weight: 500;
+        border: 2px solid transparent;
+        position: relative;
+      }
+      label:hover,
+      label.selected {
+        background: #dfe9ff;
+        border-color: #007bff;
+        color: #007bff;
+      }
+      input[type="radio"] {
+        accent-color: #007bff;
+        margin-right: 6px;
+        transform: scale(1.2);
+      }
+      .emoji {
+        font-size: 22px;
+        margin-right: 4px;
+      }
+      button,
+      .share-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
+        color: white;
+        padding: 16px;
+        font-size: 19px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-top: 22px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 16px #007bff33;
+        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+        display: block;
+      }
+      button:hover,
+      .share-btn:hover {
+        background: linear-gradient(90deg, #0056b3 60%, #74ebd5 100%);
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 8px 24px #007bff44;
+      }
+      .share-btn {
+        background: linear-gradient(90deg, #ffb347 60%, #ff6961 100%);
+        margin-top: 12px;
+        font-size: 18px;
+        box-shadow: 0 2px 12px #ffb34733;
+        display: none;
+      }
+      .share-btn.show {
+        display: block;
+        animation: popIn 0.7s cubic-bezier(0.4, 2, 0.6, 1);
+      }
+      .share-btn:active {
+        background: linear-gradient(90deg, #ff9800 60%, #ff1744 100%);
+        transform: scale(0.98);
+      }
+      #downloadBtn {
+        background: linear-gradient(90deg, #b3c6ff 60%, #007bff 100%);
+        margin-top: 12px;
+        font-size: 18px;
+        box-shadow: 0 2px 12px #b3c6ff33;
+        display: none;
+      }
+      #retakeBtn {
+        background: linear-gradient(90deg, #74ebd5 60%, #007bff 100%);
+        margin-top: 12px;
+        font-size: 18px;
+        box-shadow: 0 2px 12px #74ebd533;
+        display: none;
+      }
+      .result {
+        margin-top: 32px;
+        padding: 32px 22px;
+        background: linear-gradient(120deg, #e0e7ff 60%, #b3c6ff 100%);
+        border-radius: 18px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 23px;
+        display: none;
+        box-shadow: 0 4px 24px #b3c6ff55;
+        position: relative;
+        animation: fadeInUp 0.6s ease;
+      }
+      .result.show {
+        display: block;
+        animation: popIn 0.7s cubic-bezier(0.4, 2, 0.6, 1);
+      }
+      .result .score {
+        font-size: 28px;
+        color: #007bff;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .result .level {
+        font-size: 24px;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .result .suggestion {
+        font-size: 18px;
+        color: #333;
+        margin-top: 12px;
+        opacity: 0.88;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes popIn {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        70% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      /* Confetti */
+      .confetti {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+      .confetti-piece {
+        position: absolute;
+        width: 10px;
+        height: 18px;
+        border-radius: 3px;
+        opacity: 0.8;
+        animation: confetti-fall 1.8s linear forwards;
+      }
+      @keyframes confetti-fall {
+        to {
+          transform: translateY(350px) rotateZ(360deg);
+          opacity: 0.2;
+        }
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 0 0 18px 0;
+          border-radius: 16px;
+        }
+        .header {
+          font-size: 18px;
+          padding: 18px 0 10px 0;
+          border-radius: 16px 16px 0 0;
+        }
+        .question {
+          margin: 14px 0;
+          padding: 12px 8px 8px 8px;
+          border-radius: 10px;
+        }
+        .result {
+          padding: 18px 6px;
+          border-radius: 10px;
+          font-size: 18px;
+        }
+        button,
+        .share-btn {
+          font-size: 16px;
+          padding: 12px;
+          border-radius: 8px;
+        }
+        .input-row {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 10px 8px;
+        }
+        .input-row input[type="text"] {
+          width: 100%;
+          margin-left: 0;
+          margin-top: 8px;
+        }
+      }
+      @media (max-width: 400px) {
+        .header h2 {
+          font-size: 22px;
+        }
+        .result {
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Animated SVG waves background (behind particles) -->
+    <div
+      id="bg-waves"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -2;
+        overflow: hidden;
+        pointer-events: none;
+      "
+    >
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 1920 400"
+        preserveAspectRatio="none"
+        style="position: absolute; bottom: 0; left: 0"
+      >
+        <defs>
+          <linearGradient id="waveGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#74ebd5" />
+            <stop offset="100%" stop-color="#acb6e5" />
+          </linearGradient>
+        </defs>
+        <path
+          id="wave1"
+          d="M0,320 Q480,400 960,320 T1920,320 V400 H0 Z"
+          fill="url(#waveGradient)"
+          opacity="0.7"
+        >
+          <animate
+            attributeName="d"
+            dur="10s"
+            repeatCount="indefinite"
+            values="
+              M0,320 Q480,400 960,320 T1920,320 V400 H0 Z;
+              M0,320 Q480,280 960,340 T1920,320 V400 H0 Z;
+              M0,320 Q480,400 960,320 T1920,320 V400 H0 Z
+            "
+          />
+        </path>
+        <path
+          id="wave2"
+          d="M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z"
+          fill="#b3c6ff"
+          opacity="0.4"
+        >
+          <animate
+            attributeName="d"
+            dur="14s"
+            repeatCount="indefinite"
+            values="
+              M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z;
+              M0,350 Q600,330 1200,390 T1920,370 V400 H0 Z;
+              M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z
+            "
+          />
+        </path>
+      </svg>
+    </div>
+    <!-- Particle background canvas -->
+    <canvas
+      id="particles-bg"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none;
+      "
+    ></canvas>
+    <div class="container" style="position: relative; z-index: 1">
+      <div class="header">
+        <i class="fa-solid fa-brain"></i>
+        <h2>GAD-7 Anxiety Test</h2>
+        <div class="subtitle">Self-Assessment (Hindi)</div>
+        <div class="svg-anim">
+          <svg
+            width="80"
+            height="40"
+            viewBox="0 0 80 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <ellipse
+              id="pulse-ellipse"
+              cx="40"
+              cy="20"
+              rx="28"
+              ry="12"
+              fill="#74ebd5"
+              opacity="0.7"
+            >
+              <animate
+                attributeName="rx"
+                values="28;34;28"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="opacity"
+                values="0.7;1;0.7"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+            </ellipse>
+            <ellipse
+              cx="40"
+              cy="20"
+              rx="18"
+              ry="8"
+              fill="#007bff"
+              opacity="0.5"
+            />
+            <circle id="pulse-dot" cx="40" cy="20" r="5" fill="#fff">
+              <animate
+                attributeName="r"
+                values="5;8;5"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="opacity"
+                values="1;0.7;1"
+                dur="2s"
+                repeatCount="indefinite"
+              />
+            </circle>
+          </svg>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <form id="gad7Form" autocomplete="off">
+        <div class="input-row">
+          <label>
+            <i class="fa-solid fa-user"></i> Name:
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              placeholder="Enter your name"
+              required
+            />
+          </label>
+        </div>
+        <div class="question" data-q="1">
+          <p>
+            <span class="emoji">😟</span>1. Bechaini, ghabrahat ya tensed feel
+            karna?
+          </p>
+          <label
+            ><input type="radio" name="q1" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q1" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q1" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q1" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="2">
+          <p>
+            <span class="emoji">🤯</span>2. Chinta ko control karne me mushkil?
+          </p>
+          <label
+            ><input type="radio" name="q2" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q2" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q2" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q2" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="3">
+          <p>
+            <span class="emoji">😬</span>3. Alag-alag cheezon ki zyada tension
+            lena?
+          </p>
+          <label
+            ><input type="radio" name="q3" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q3" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q3" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q3" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="4">
+          <p><span class="emoji">🧘‍♂️</span>4. Relax hone me dikkat?</p>
+          <label
+            ><input type="radio" name="q4" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q4" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q4" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q4" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="5">
+          <p>
+            <span class="emoji">🦶</span>5. Itna restless feel karna ki chain se
+            baith na paana?
+          </p>
+          <label
+            ><input type="radio" name="q5" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q5" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q5" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q5" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="6">
+          <p>
+            <span class="emoji">😠</span>6. Asaani se irritate ya chidh jaana?
+          </p>
+          <label
+            ><input type="radio" name="q6" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q6" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q6" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q6" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <div class="question" data-q="7">
+          <p>
+            <span class="emoji">😨</span>7. Dar lagna jaise kuch bura hone wala
+            hai?
+          </p>
+          <label
+            ><input type="radio" name="q7" value="0" />
+            <span class="emoji">😊</span> 0 - Bilkul nahi</label
+          >
+          <label
+            ><input type="radio" name="q7" value="1" />
+            <span class="emoji">🙂</span> 1 - Kuch din</label
+          >
+          <label
+            ><input type="radio" name="q7" value="2" />
+            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
+          >
+          <label
+            ><input type="radio" name="q7" value="3" />
+            <span class="emoji">😰</span> 3 - Lagbhag har din</label
+          >
+        </div>
+        <button type="button" onclick="calculateResult()">Submit</button>
+      </form>
+      <div class="result" id="result"></div>
+      <button class="share-btn" id="shareBtn" onclick="shareResult()">
+        <i class="fa-solid fa-share-nodes"></i> Share Result
+      </button>
+      <button id="downloadBtn" onclick="downloadResultAsImage()">
+        <i class="fa-solid fa-download"></i> Download Result
+      </button>
+      <button id="retakeBtn" onclick="retakeTest()">
+        <i class="fa-solid fa-rotate-left"></i> Retake Test
+      </button>
+      <div class="confetti" id="confetti"></div>
+      <div
+        style="
+          text-align: center;
+          margin-top: 24px;
+          color: #888;
+          font-size: 15px;
+        "
+      >
+        Developed by <b>Rahul Kumar</b>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+      // Particle background animation
+      const canvas = document.getElementById("particles-bg");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      const particleCount = 48;
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function randomColor() {
+        const colors = [
+          "#74ebd5",
+          "#007bff",
+          "#b3c6ff",
+          "#ffb347",
+          "#ff6961",
+          "#e0e7ff",
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      function createParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: 1.5 + Math.random() * 2.5,
+            dx: -0.5 + Math.random(),
+            dy: -0.5 + Math.random(),
+            color: randomColor(),
+            alpha: 0.4 + Math.random() * 0.5,
+          });
+        }
+      }
+      function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let p of particles) {
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+      function updateParticles() {
+        for (let p of particles) {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        }
+      }
+      function animateParticles() {
+        updateParticles();
+        drawParticles();
+        requestAnimationFrame(animateParticles);
+      }
+      createParticles();
+      animateParticles();
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        createParticles();
+      });
+
+      // Progress bar update
+      const form = document.getElementById("gad7Form");
+      const progress = document.getElementById("progress");
+      form.addEventListener("change", () => {
+        let answered = 0;
+        for (let i = 1; i <= 7; i++) {
+          const radios = document.getElementsByName("q" + i);
+          for (let r of radios) if (r.checked) answered++;
+        }
+        progress.style.width = (answered / 7) * 100 + "%";
+        // Highlight selected label
+        for (let i = 1; i <= 7; i++) {
+          const radios = document.getElementsByName("q" + i);
+          for (let r of radios) {
+            if (r.checked) r.parentElement.classList.add("selected");
+            else r.parentElement.classList.remove("selected");
+          }
+        }
+      });
+
+      // Confetti effect
+      function launchConfetti() {
+        const confetti = document.getElementById("confetti");
+        confetti.innerHTML = "";
+        const colors = [
+          "#007bff",
+          "#74ebd5",
+          "#ffb347",
+          "#ff6961",
+          "#b3c6ff",
+          "#e0e7ff",
+        ];
+        for (let i = 0; i < 32; i++) {
+          const piece = document.createElement("div");
+          piece.className = "confetti-piece";
+          piece.style.left = Math.random() * 100 + "%";
+          piece.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          piece.style.transform = `rotateZ(${Math.random() * 360}deg)`;
+          piece.style.animationDelay = Math.random() * 0.7 + "s";
+          confetti.appendChild(piece);
+        }
+        setTimeout(() => (confetti.innerHTML = ""), 2000);
+      }
+
+      function calculateResult() {
+        // Get user name
+        const userName = document.getElementById("userName").value.trim();
+        if (!userName) {
+          alert("Please enter your name before submitting the test.");
+          document.getElementById("userName").focus();
+          return;
+        }
+
+        let total = 0;
+        for (let i = 1; i <= 7; i++) {
+          let radios = document.getElementsByName("q" + i);
+          let answered = false;
+          for (let r of radios) {
+            if (r.checked) {
+              total += parseInt(r.value);
+              answered = true;
+            }
+          }
+          if (!answered) {
+            alert("Kripya Question " + i + " ka answer dein.");
+            return;
+          }
+        }
+        let level = "";
+        let emoji = "";
+        let suggestion = "";
+        if (total <= 4) {
+          level = "Minimal Anxiety";
+          emoji = "😊";
+          suggestion =
+            "Aapka anxiety level bahut kam hai. Apne aap ko healthy rakhne ki aadatein jaari rakhein!";
+        } else if (total <= 9) {
+          level = "Mild Anxiety";
+          emoji = "🙂";
+          suggestion =
+            "Thoda anxiety hai, lekin chinta ki baat nahi. Dhyan, yoga, ya apne dosto se baat karna madadgar ho sakta hai.";
+        } else if (total <= 14) {
+          level = "Moderate Anxiety";
+          emoji = "😟";
+          suggestion =
+            "Aapko moderate anxiety hai. Apne parivaar ya kisi counselor se baat karna upyogi ho sakta hai.";
+        } else {
+          level = "Severe Anxiety";
+          emoji = "😰";
+          suggestion =
+            "Aapko severe anxiety hai. Kripya mental health professional se sampark karein.";
+        }
+
+        const resultBox = document.getElementById("result");
+        resultBox.innerHTML = `<div style="font-size:18px;margin-bottom:10px;color:#007bff;"><b>Name:</b> ${userName}</div>
+        <span class="score">Total Score: <b>${total}/21</b></span>
+        <span class="level">Result: <b>${level} ${emoji}</b></span>
+        <div class="suggestion">${suggestion}</div>`;
+        resultBox.classList.add("show");
+        launchConfetti();
+
+        // Show share, download, and retake buttons
+        document.getElementById("shareBtn").classList.add("show");
+        document.getElementById("downloadBtn").style.display = "block";
+        document.getElementById("retakeBtn").style.display = "block";
+        // Store result for sharing
+        window._shareText = `GAD-7 Anxiety Test Result for ${userName}:\nTotal Score: ${total}/21\nLevel: ${level} ${emoji}\n${suggestion}`;
+      }
+
+      // Download result as image using html2canvas
+      function downloadResultAsImage() {
+        const resultBox = document.getElementById("result");
+        html2canvas(resultBox, { backgroundColor: null }).then(function (
+          canvas
+        ) {
+          const link = document.createElement("a");
+          link.download = "GAD7_Result.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      }
+
+      // Retake Test logic
+      function retakeTest() {
+        // Reset form
+        document.getElementById("gad7Form").reset();
+        // Reset progress bar
+        document.getElementById("progress").style.width = "0%";
+        // Remove selected label highlight
+        for (let i = 1; i <= 7; i++) {
+          const radios = document.getElementsByName("q" + i);
+          for (let r of radios) {
+            r.parentElement.classList.remove("selected");
+          }
+        }
+        // Hide result, share, download, and retake buttons
+        document.getElementById("result").classList.remove("show");
+        document.getElementById("shareBtn").classList.remove("show");
+        document.getElementById("downloadBtn").style.display = "none";
+        document.getElementById("retakeBtn").style.display = "none";
+        // Remove confetti
+        document.getElementById("confetti").innerHTML = "";
+        // Scroll to top of form
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // Share button logic
+      function shareResult() {
+        const shareText =
+          window._shareText || "I just took the GAD-7 Anxiety Test!";
+        if (navigator.share) {
+          navigator
+            .share({
+              title: "My GAD-7 Anxiety Test Result",
+              text: shareText,
+              url: window.location.href,
+            })
+            .catch(() => {});
+        } else {
+          // Fallback: copy to clipboard
+          try {
+            navigator.clipboard.writeText(shareText);
+            alert("Result copied! You can now paste it anywhere.");
+          } catch {
+            alert("Copy this result:\n\n" + shareText);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
