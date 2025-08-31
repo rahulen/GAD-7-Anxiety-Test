@@ -3,23 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GAD-7 Anxiety Test</title>
+    <title>GAD-7 Anxiety Test + Calm Games</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
     <style>
+      /* ==== Base styles with enhancements ==== */
+      :root {
+        --primary: #4a6fa5;
+        --secondary: #74ebd5;
+        --accent: #acb6e5;
+        --mint: #a0e8d1;
+        --lavender: #d6d4ff;
+        --skyblue: #a6dcef;
+        --success: #5cb85c;
+        --warning: #f0ad4e;
+        --danger: #d9534f;
+        --dark: #2d3a4a;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
-        background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%);
+        background: linear-gradient(135deg, var(--mint) 0%, var(--lavender) 50%, var(--skyblue) 100%);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow-x: hidden;
+        position: relative;
+        color: var(--dark);
       }
+      
+      /* Animated background elements */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+          radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.4) 5px, transparent 5px),
+          radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.3) 8px, transparent 8px),
+          radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.5) 6px, transparent 6px);
+        background-size: 300px 300px;
+        z-index: -1;
+        animation: float 20s infinite linear;
+      }
+      
+      @keyframes float {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-100px) rotate(360deg); }
+      }
+      
       .container {
         max-width: 700px;
         width: 98%;
@@ -30,60 +73,93 @@
         animation: fadeIn 1s ease-in-out;
         position: relative;
         margin: 32px 0;
+        z-index: 1;
+        backdrop-filter: blur(10px);
       }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
       .header {
-        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
+        background: linear-gradient(90deg, var(--primary) 60%, var(--secondary) 100%);
         border-radius: 28px 28px 0 0;
         padding: 32px 0 18px 0;
         text-align: center;
         color: #fff;
         box-shadow: 0 4px 16px rgba(0, 123, 255, 0.08);
         position: relative;
+        overflow: hidden;
       }
-      .header i {
-        font-size: 48px;
-        margin-bottom: 8px;
-        color: #fff;
-        filter: drop-shadow(0 2px 8px #007bff88);
+      
+      .header::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+        opacity: 0.5;
+        transform: rotate(30deg);
       }
-      .header h2 {
-        margin: 0;
-        font-size: 36px;
-        letter-spacing: 1.5px;
-        font-weight: 700;
-        text-shadow: 0 2px 8px #007bff33;
-      }
-      .header .subtitle {
-        font-size: 17px;
-        opacity: 0.92;
-        margin-top: 7px;
-        margin-bottom: 10px;
-        letter-spacing: 0.5px;
-      }
-      .header .svg-anim {
-        margin-top: 18px;
-        margin-bottom: -10px;
-      }
+      
+      .header i { font-size: 48px; margin-bottom: 8px; color: #fff; z-index: 2; position: relative; }
+      .header h2 { margin: 0; font-size: 36px; letter-spacing: 1.5px; font-weight: 700; z-index: 2; position: relative; }
+      .header .subtitle { font-size: 17px; opacity: 0.92; margin-top: 7px; z-index: 2; position: relative; }
+      
       .progress-bar {
         width: 90%;
-        margin: 0 auto 22px auto;
+        margin: 0 auto 22px;
         background: #e3e9f7;
         border-radius: 8px;
         height: 14px;
         overflow: hidden;
-        box-shadow: 0 2px 8px #e3e9f7;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
       }
+      
       .progress {
         height: 100%;
-        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
+        background: linear-gradient(90deg, var(--primary) 60%, var(--secondary) 100%);
         width: 0%;
         border-radius: 8px;
-        transition: width 0.4s cubic-bezier(0.4, 2, 0.6, 1);
+        transition: width .4s cubic-bezier(.4, 2, .6, 1);
+        position: relative;
+        overflow: hidden;
       }
-      form {
-        width: 90%;
-        margin: 0 auto;
+      
+      .progress::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: linear-gradient(
+          -45deg,
+          rgba(255, 255, 255, 0.2) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0.2) 75%,
+          transparent 75%,
+          transparent
+        );
+        z-index: 1;
+        background-size: 20px 20px;
+        animation: move 1s linear infinite;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
       }
+      
+      @keyframes move {
+        0% { background-position: 0 0; }
+        100% { background-position: 20px 0; }
+      }
+      
+      form { width: 90%; margin: 0 auto; }
+      
       .input-row {
         display: flex;
         align-items: center;
@@ -93,15 +169,23 @@
         padding: 12px 18px;
         border-radius: 12px;
         box-shadow: 0 2px 8px #e3e9f7;
+        transition: transform 0.2s, box-shadow 0.2s;
       }
+      
+      .input-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px #d6e0f5;
+      }
+      
       .input-row label {
         font-weight: 600;
-        color: #007bff;
+        color: var(--primary);
         font-size: 17px;
         margin-right: 8px;
         display: flex;
         align-items: center;
       }
+      
       .input-row input[type="text"] {
         padding: 8px 14px;
         border-radius: 8px;
@@ -109,28 +193,30 @@
         font-size: 17px;
         width: 60%;
         outline: none;
-        transition: border 0.2s;
+        transition: all 0.2s;
       }
+      
       .input-row input[type="text"]:focus {
-        border: 1.5px solid #007bff;
+        border: 1.5px solid var(--primary);
         background: #eaf4ff;
+        box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
       }
+      
       .question {
         margin: 28px 0;
-        padding: 22px 22px 16px 22px;
+        padding: 22px;
         background: #f8f9ff;
         border-radius: 18px;
         box-shadow: 0 2px 12px #e3e9f7;
+        border-left: 6px solid var(--secondary);
         transition: transform 0.2s, box-shadow 0.2s;
-        position: relative;
-        border-left: 6px solid #74ebd5;
-        animation: fadeInUp 0.7s;
       }
+      
       .question:hover {
-        transform: scale(1.02);
-        background: #eef3ff;
-        box-shadow: 0 4px 20px #dbeafe;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px #d6e0f5;
       }
+      
       .question p {
         margin: 0 0 14px;
         font-weight: bold;
@@ -140,7 +226,8 @@
         align-items: center;
         gap: 8px;
       }
-      label {
+      
+      label.option {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -149,81 +236,85 @@
         margin-bottom: 10px;
         border-radius: 10px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all .2s;
         font-size: 17px;
         font-weight: 500;
         border: 2px solid transparent;
         position: relative;
+        overflow: hidden;
       }
-      label:hover,
-      label.selected {
+      
+      label.option::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s;
+      }
+      
+      label.option:hover::before {
+        left: 100%;
+      }
+      
+      label.option:hover, label.option.selected {
         background: #dfe9ff;
-        border-color: #007bff;
-        color: #007bff;
+        border-color: var(--primary);
+        color: var(--primary);
       }
+      
       input[type="radio"] {
-        accent-color: #007bff;
+        accent-color: var(--primary);
         margin-right: 6px;
         transform: scale(1.2);
       }
-      .emoji {
-        font-size: 22px;
-        margin-right: 4px;
-      }
-      button,
-      .share-btn {
-        width: 100%;
-        background: linear-gradient(90deg, #007bff 60%, #74ebd5 100%);
-        color: white;
-        padding: 16px;
-        font-size: 19px;
-        border: none;
+      
+      .emoji { font-size: 22px; margin-right: 4px; }
+      
+      button, .share-btn {
+        width: 100%; 
+        background: linear-gradient(90deg, var(--primary) 60%, var(--secondary) 100%);
+        color: white; 
+        padding: 16px; 
+        font-size: 19px; 
+        border: none; 
         border-radius: 12px;
-        cursor: pointer;
-        margin-top: 22px;
-        font-weight: 600;
+        cursor: pointer; 
+        margin-top: 22px; 
+        font-weight: 600; 
         letter-spacing: 1px;
-        box-shadow: 0 4px 16px #007bff33;
-        transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 123, 255, 0.2); 
+        transition: all .3s;
         position: relative;
         overflow: hidden;
-        display: block;
       }
-      button:hover,
-      .share-btn:hover {
-        background: linear-gradient(90deg, #0056b3 60%, #74ebd5 100%);
+      
+      button::before, .share-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s;
+      }
+      
+      button:hover::before, .share-btn:hover::before {
+        left: 100%;
+      }
+      
+      button:hover, .share-btn:hover {
         transform: translateY(-2px) scale(1.03);
-        box-shadow: 0 8px 24px #007bff44;
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
       }
-      .share-btn {
-        background: linear-gradient(90deg, #ffb347 60%, #ff6961 100%);
-        margin-top: 12px;
-        font-size: 18px;
-        box-shadow: 0 2px 12px #ffb34733;
-        display: none;
+      
+      button:active, .share-btn:active {
+        transform: translateY(0) scale(1);
       }
-      .share-btn.show {
-        display: block;
-        animation: popIn 0.7s cubic-bezier(0.4, 2, 0.6, 1);
-      }
-      .share-btn:active {
-        background: linear-gradient(90deg, #ff9800 60%, #ff1744 100%);
-        transform: scale(0.98);
-      }
-      #downloadBtn {
-        background: linear-gradient(90deg, #b3c6ff 60%, #007bff 100%);
-        margin-top: 12px;
-        font-size: 18px;
-        box-shadow: 0 2px 12px #b3c6ff33;
-        display: none;
-      }
-      #retakeBtn {
-        background: linear-gradient(90deg, #74ebd5 60%, #007bff 100%);
-        margin-top: 12px;
-        font-size: 18px;
-        box-shadow: 0 2px 12px #74ebd533;
-        display: none;
-      }
+      
       .result {
         margin-top: 32px;
         padding: 32px 22px;
@@ -233,702 +324,1628 @@
         text-align: center;
         font-size: 23px;
         display: none;
-        box-shadow: 0 4px 24px #b3c6ff55;
-        position: relative;
-        animation: fadeInUp 0.6s ease;
+        box-shadow: 0 4px 24px rgba(179, 198, 255, 0.3);
+        animation: fadeIn 0.5s ease-out;
       }
-      .result.show {
-        display: block;
-        animation: popIn 0.7s cubic-bezier(0.4, 2, 0.6, 1);
+      
+      .result.show { display: block; }
+      .result .score { font-size: 28px; color: var(--primary); margin-bottom: 10px; display: block; }
+      .result .level { font-size: 24px; margin-bottom: 10px; display: block; }
+      .result .suggestion { font-size: 18px; color: #333; margin-top: 12px; opacity: .88; }
+      
+      /* ==== Calm Zone button ==== */
+      .calm-fab {
+        position: fixed; 
+        right: 18px; 
+        bottom: 18px; 
+        z-index: 5; 
+        border-radius: 999px;
+        width: 58px; 
+        height: 58px; 
+        display: grid; 
+        place-items: center;
+        background: linear-gradient(135deg, #ffb347, #ff6961); 
+        box-shadow: 0 10px 32px rgba(255, 105, 97, 0.3);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        animation: pulse 2s infinite;
       }
-      .result .score {
-        font-size: 28px;
-        color: #007bff;
-        margin-bottom: 10px;
-        display: block;
+      
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 10px 32px rgba(255, 105, 97, 0.3); }
+        50% { transform: scale(1.05); box-shadow: 0 12px 36px rgba(255, 105, 97, 0.5); }
+        100% { transform: scale(1); box-shadow: 0 10px 32px rgba(255, 105, 97, 0.3); }
       }
-      .result .level {
-        font-size: 24px;
-        margin-bottom: 10px;
-        display: block;
+      
+      .calm-fab:hover {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 14px 40px rgba(255, 105, 97, 0.4);
+        animation: none;
       }
-      .result .suggestion {
-        font-size: 18px;
-        color: #333;
-        margin-top: 12px;
-        opacity: 0.88;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes popIn {
-        0% {
-          transform: scale(0.7);
-          opacity: 0;
-        }
-        70% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-      /* Confetti */
-      .confetti {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
+      
+      .calm-fab i { font-size: 22px; color: white; }
+      
+      .calm-fab span {
+        position: absolute; 
+        bottom: 70px; 
+        right: 0; 
+        background: #fff; 
+        color: #ff6961;
+        font-weight: 700; 
+        padding: 6px 10px; 
+        border-radius: 10px; 
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s;
         pointer-events: none;
-        z-index: 10;
+        white-space: nowrap;
       }
-      .confetti-piece {
-        position: absolute;
-        width: 10px;
-        height: 18px;
-        border-radius: 3px;
-        opacity: 0.8;
-        animation: confetti-fall 1.8s linear forwards;
+      
+      .calm-fab:hover span {
+        opacity: 1;
+        transform: translateY(0);
       }
-      @keyframes confetti-fall {
-        to {
-          transform: translateY(350px) rotateZ(360deg);
-          opacity: 0.2;
-        }
+      
+      /* ==== Calm Zone modal ==== */
+      .modal {
+        position: fixed; 
+        inset: 0; 
+        background: rgba(0, 0, 0, 0.4); 
+        display: none; 
+        align-items: center; 
+        justify-content: center; 
+        z-index: 6;
+        backdrop-filter: blur(4px);
       }
-      @media (max-width: 600px) {
-        .container {
-          padding: 0 0 18px 0;
-          border-radius: 16px;
-        }
-        .header {
-          font-size: 18px;
-          padding: 18px 0 10px 0;
-          border-radius: 16px 16px 0 0;
-        }
-        .question {
-          margin: 14px 0;
-          padding: 12px 8px 8px 8px;
-          border-radius: 10px;
-        }
-        .result {
-          padding: 18px 6px;
-          border-radius: 10px;
-          font-size: 18px;
-        }
-        button,
-        .share-btn {
-          font-size: 16px;
-          padding: 12px;
-          border-radius: 8px;
-        }
-        .input-row {
-          flex-direction: column;
-          align-items: flex-start;
-          padding: 10px 8px;
-        }
-        .input-row input[type="text"] {
-          width: 100%;
-          margin-left: 0;
-          margin-top: 8px;
-        }
+      
+      .modal.show { display: flex; animation: fadeIn 0.3s ease-out; }
+      
+      .modal-card {
+        width: min(920px, 96vw); 
+        background: #fff; 
+        border-radius: 22px; 
+        padding: 18px; 
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        animation: modalSlideIn 0.3s ease-out;
+        max-height: 90vh;
+        overflow-y: auto;
       }
-      @media (max-width: 400px) {
-        .header h2 {
-          font-size: 22px;
-        }
-        .result {
-          font-size: 15px;
-        }
+      
+      @keyframes modalSlideIn {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      
+      .modal-header {
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        gap: 10px; 
+        padding: 6px 6px 10px;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 16px;
+      }
+      
+      .pill {
+        display: inline-flex; 
+        gap: 8px; 
+        align-items: center; 
+        background: #eef3ff; 
+        color: #2563eb; 
+        border-radius: 999px; 
+        padding: 8px 12px; 
+        font-weight: 700;
+      }
+      
+      .tabs {
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap; 
+        margin: 10px 0 16px;
+      }
+      
+      .tabs button {
+        width: auto; 
+        padding: 10px 14px; 
+        background: #f8f9ff; 
+        color: #1f2937; 
+        box-shadow: none;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s;
+      }
+      
+      .tabs button.active {
+        background: #2563eb; 
+        color: #fff;
+        border-color: #2563eb;
+      }
+      
+      .game { display: none; }
+      .game.active { display: block; animation: fadeIn 0.3s ease-out; }
+      
+      /* Breathing game */
+      .breath-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      
+      .breath-stage {
+        font-size: 18px; 
+        text-align: center; 
+        margin-top: 10px; 
+        color: #1f2937;
+        font-weight: 600;
+      }
+      
+      .circle-wrap {
+        display: grid; 
+        place-items: center; 
+        margin: 14px auto;
+        position: relative;
+      }
+      
+      .circle-progress {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: conic-gradient(var(--secondary) 0%, #e5e7eb 0%);
+        display: grid;
+        place-items: center;
+        transition: background 0.3s;
+      }
+      
+      .circle {
+        width: 120px; 
+        height: 120px; 
+        border-radius: 50%; 
+        background: radial-gradient(circle at 30% 30%, var(--secondary), var(--primary));
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3); 
+        transform: scale(1); 
+        transition: transform 1s ease-in-out;
+        display: grid;
+        place-items: center;
+        color: white;
+        font-weight: bold;
+      }
+      
+      .stats {
+        display: flex; 
+        gap: 10px; 
+        justify-content: center; 
+        font-size: 14px; 
+        color: #374151; 
+        margin-top: 8px;
+      }
+      
+      .stats span {
+        background: #f3f4f6;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+      
+      /* 5-4-3-2-1 Grounding */
+      .grounding-step {
+        background: #f8f9ff; 
+        border: 1px solid #e5e7eb; 
+        border-left: 4px solid var(--secondary); 
+        border-radius: 12px; 
+        padding: 12px; 
+        margin: 10px 0;
+        transition: transform 0.2s;
+      }
+      
+      .grounding-step:hover {
+        transform: translateY(-2px);
+      }
+      
+      .grounding-step h4 {
+        margin: 0 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .chips {
+        display: flex; 
+        gap: 8px; 
+        flex-wrap: wrap;
+      }
+      
+      .chip {
+        background: #eef3ff; 
+        border: 1px dashed #b3c6ff; 
+        border-radius: 999px; 
+        padding: 6px 10px; 
+        font-size: 14px;
+        animation: popIn 0.3s ease-out;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      @keyframes popIn {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      
+      .chip:hover {
+        background: #dfe7ff;
+        transform: translateY(-2px);
+      }
+      
+      /* Doodle Pad */
+      .doodle-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .toolbar {
+        display: flex; 
+        gap: 8px; 
+        margin: 10px 0;
+        flex-wrap: wrap;
+      }
+      
+      .toolbar input[type=range] { width: 140px; }
+      
+      #doodle {
+        width: 100%; 
+        height: 280px; 
+        background: #fff; 
+        border: 1px solid #e5e7eb; 
+        border-radius: 12px; 
+        cursor: crosshair;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      
+      .muted { color: #6b7280; font-size: 13px; }
+      
+      /* Badge animations */
+      .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #ffb347, #ff6961);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 8px;
+        animation: bounce 2s infinite;
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+        60% { transform: translateY(-3px); }
+      }
+      
+      /* Streak counter */
+      .streak {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #ff6961;
+        margin-left: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Sound controls */
+      .sound-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
+      }
+      
+      .sound-toggle {
+        background: #eef3ff;
+        border: 1px solid #b3c6ff;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .sound-toggle.active {
+        background: #2563eb;
+        color: white;
+      }
+      
+      /* New Game: Bubble Popper */
+      .bubble-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      
+      #bubbleCanvas {
+        width: 100%;
+        height: 300px;
+        background: linear-gradient(180deg, #a6dcef 0%, #d6d4ff 100%);
+        border-radius: 12px;
+        cursor: pointer;
+        touch-action: none;
+      }
+      
+      .bubble-stats {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+      
+      .bubble-stat {
+        background: #eef3ff;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-weight: 600;
+      }
+      
+      /* New Game: Memory Cards */
+      .memory-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        width: 100%;
+        max-width: 400px;
+      }
+      
+      .memory-card {
+        aspect-ratio: 1;
+        background: var(--primary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.3s;
+        transform-style: preserve-3d;
+      }
+      
+      .memory-card.flipped {
+        transform: rotateY(180deg);
+        background: var(--secondary);
+      }
+      
+      .memory-card.matched {
+        background: var(--success);
+        transform: scale(0.95);
+        cursor: default;
+      }
+      
+      .memory-stats {
+        display: flex;
+        gap: 16px;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 600px) { 
+        .circle { width: 100px; height: 100px; }
+        .circle-progress { width: 140px; height: 140px; }
+        .tabs { justify-content: center; }
+        .tabs button { flex: 1; min-width: 120px; justify-content: center; }
+        .header h2 { font-size: 28px; }
+        .memory-grid { grid-template-columns: repeat(3, 1fr); }
       }
     </style>
   </head>
   <body>
-    <!-- Animated SVG waves background (behind particles) -->
-    <div
-      id="bg-waves"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -2;
-        overflow: hidden;
-        pointer-events: none;
-      "
-    >
-      <svg
-        width="100%"
-        height="100%"
-        viewBox="0 0 1920 400"
-        preserveAspectRatio="none"
-        style="position: absolute; bottom: 0; left: 0"
-      >
-        <defs>
-          <linearGradient id="waveGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#74ebd5" />
-            <stop offset="100%" stop-color="#acb6e5" />
-          </linearGradient>
-        </defs>
-        <path
-          id="wave1"
-          d="M0,320 Q480,400 960,320 T1920,320 V400 H0 Z"
-          fill="url(#waveGradient)"
-          opacity="0.7"
-        >
-          <animate
-            attributeName="d"
-            dur="10s"
-            repeatCount="indefinite"
-            values="
-              M0,320 Q480,400 960,320 T1920,320 V400 H0 Z;
-              M0,320 Q480,280 960,340 T1920,320 V400 H0 Z;
-              M0,320 Q480,400 960,320 T1920,320 V400 H0 Z
-            "
-          />
-        </path>
-        <path
-          id="wave2"
-          d="M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z"
-          fill="#b3c6ff"
-          opacity="0.4"
-        >
-          <animate
-            attributeName="d"
-            dur="14s"
-            repeatCount="indefinite"
-            values="
-              M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z;
-              M0,350 Q600,330 1200,390 T1920,370 V400 H0 Z;
-              M0,350 Q600,370 1200,350 T1920,370 V400 H0 Z
-            "
-          />
-        </path>
-      </svg>
-    </div>
-    <!-- Particle background canvas -->
-    <canvas
-      id="particles-bg"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-        pointer-events: none;
-      "
-    ></canvas>
-    <div class="container" style="position: relative; z-index: 1">
+    <!-- BG (simple) -->
+    <div class="container">
       <div class="header">
         <i class="fa-solid fa-brain"></i>
         <h2>GAD-7 Anxiety Test</h2>
-        <div class="subtitle">Self-Assessment (Hindi)</div>
-        <div class="svg-anim">
-          <svg
-            width="80"
-            height="40"
-            viewBox="0 0 80 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <ellipse
-              id="pulse-ellipse"
-              cx="40"
-              cy="20"
-              rx="28"
-              ry="12"
-              fill="#74ebd5"
-              opacity="0.7"
-            >
-              <animate
-                attributeName="rx"
-                values="28;34;28"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="0.7;1;0.7"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </ellipse>
-            <ellipse
-              cx="40"
-              cy="20"
-              rx="18"
-              ry="8"
-              fill="#007bff"
-              opacity="0.5"
-            />
-            <circle id="pulse-dot" cx="40" cy="20" r="5" fill="#fff">
-              <animate
-                attributeName="r"
-                values="5;8;5"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="1;0.7;1"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </circle>
-          </svg>
-        </div>
+        <div class="subtitle">Self-Assessment (Hindi) + <span style="font-weight:700">Calm Games</span></div>
       </div>
-      <div class="progress-bar">
-        <div class="progress" id="progress"></div>
-      </div>
+
+      <!-- progress -->
+      <div class="progress-bar"><div class="progress" id="progress"></div></div>
+
+      <!-- FORM -->
       <form id="gad7Form" autocomplete="off">
         <div class="input-row">
           <label>
             <i class="fa-solid fa-user"></i> Name:
-            <input
-              type="text"
-              id="userName"
-              name="userName"
-              placeholder="Enter your name"
-              required
-            />
+            <input type="text" id="userName" name="userName" placeholder="Enter your name" required />
           </label>
         </div>
+
         <div class="question" data-q="1">
-          <p>
-            <span class="emoji">😟</span>1. Bechaini, ghabrahat ya tensed feel
-            karna?
-          </p>
-          <label
-            ><input type="radio" name="q1" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q1" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q1" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q1" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">😟</span>1. Bechaini, ghabrahat ya tensed feel karna?</p>
+          <label class="option"><input type="radio" name="q1" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q1" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q1" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q1" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="2">
-          <p>
-            <span class="emoji">🤯</span>2. Chinta ko control karne me mushkil?
-          </p>
-          <label
-            ><input type="radio" name="q2" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q2" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q2" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q2" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">🤯</span>2. Chinta ko control karne me mushkil?</p>
+          <label class="option"><input type="radio" name="q2" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q2" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q2" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q2" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="3">
-          <p>
-            <span class="emoji">😬</span>3. Alag-alag cheezon ki zyada tension
-            lena?
-          </p>
-          <label
-            ><input type="radio" name="q3" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q3" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q3" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q3" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">😬</span>3. Alag-alag cheezon ki zyada tension lena?</p>
+          <label class="option"><input type="radio" name="q3" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q3" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q3" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q3" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="4">
           <p><span class="emoji">🧘‍♂️</span>4. Relax hone me dikkat?</p>
-          <label
-            ><input type="radio" name="q4" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q4" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q4" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q4" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <label class="option"><input type="radio" name="q4" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q4" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q4" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q4" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="5">
-          <p>
-            <span class="emoji">🦶</span>5. Itna restless feel karna ki chain se
-            baith na paana?
-          </p>
-          <label
-            ><input type="radio" name="q5" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q5" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q5" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q5" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">🦶</span>5. Itna restless feel karna ki chain se baith na paana?</p>
+          <label class="option"><input type="radio" name="q5" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q5" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q5" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q5" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="6">
-          <p>
-            <span class="emoji">😠</span>6. Asaani se irritate ya chidh jaana?
-          </p>
-          <label
-            ><input type="radio" name="q6" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q6" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q6" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q6" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">😠</span>6. Asaani se irritate ya chidh jaana?</p>
+          <label class="option"><input type="radio" name="q6" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q6" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q6" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q6" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
+
         <div class="question" data-q="7">
-          <p>
-            <span class="emoji">😨</span>7. Dar lagna jaise kuch bura hone wala
-            hai?
-          </p>
-          <label
-            ><input type="radio" name="q7" value="0" />
-            <span class="emoji">😊</span> 0 - Bilkul nahi</label
-          >
-          <label
-            ><input type="radio" name="q7" value="1" />
-            <span class="emoji">🙂</span> 1 - Kuch din</label
-          >
-          <label
-            ><input type="radio" name="q7" value="2" />
-            <span class="emoji">😕</span> 2 - Aadhe din se zyada</label
-          >
-          <label
-            ><input type="radio" name="q7" value="3" />
-            <span class="emoji">😰</span> 3 - Lagbhag har din</label
-          >
+          <p><span class="emoji">😨</span>7. Dar lagna jaise kuch bura hone wala hai?</p>
+          <label class="option"><input type="radio" name="q7" value="0" /> <span class="emoji">😊</span> 0 - Bilkul nahi</label>
+          <label class="option"><input type="radio" name="q7" value="1" /> <span class="emoji">🙂</span> 1 - Kuch din</label>
+          <label class="option"><input type="radio" name="q7" value="2" /> <span class="emoji">😕</span> 2 - Aadhe din se zyada</label>
+          <label class="option"><input type="radio" name="q7" value="3" /> <span class="emoji">😰</span> 3 - Lagbhag har din</label>
         </div>
-        <button type="button" onclick="calculateResult()">Submit</button>
+
+        <button type="button" id="submitBtn">Submit</button>
       </form>
+
       <div class="result" id="result"></div>
-      <button class="share-btn" id="shareBtn" onclick="shareResult()">
-        <i class="fa-solid fa-share-nodes"></i> Share Result
-      </button>
-      <button id="downloadBtn" onclick="downloadResultAsImage()">
-        <i class="fa-solid fa-download"></i> Download Result
-      </button>
-      <button id="retakeBtn" onclick="retakeTest()">
-        <i class="fa-solid fa-rotate-left"></i> Retake Test
-      </button>
-      <div class="confetti" id="confetti"></div>
-      <div
-        style="
-          text-align: center;
-          margin-top: 24px;
-          color: #888;
-          font-size: 15px;
-        "
-      >
-        Developed by <b>Rahul Kumar</b>
+      <button class="share-btn" id="shareBtn" style="display:none"><i class="fa-solid fa-share-nodes"></i> Share Result</button>
+      <button id="downloadBtn" style="display:none"><i class="fa-solid fa-download"></i> Download Result</button>
+      <button id="retakeBtn" style="display:none"><i class="fa-solid fa-rotate-left"></i> Retake Test</button>
+
+      <div style="text-align:center;margin-top:24px;color:#888;font-size:15px">Developed by <b>Rahul Kumar</b></div>
+    </div>
+
+    <!-- Calm Zone Floating Button -->
+    <button class="calm-fab" id="openCalm" aria-label="Open Calm Zone">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Calm Zone</span>
+    </button>
+
+    <!-- Calm Zone Modal -->
+    <div class="modal" id="calmModal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="calmTitle">
+        <div class="modal-header">
+          <div class="pill"><i class="fa-solid fa-seedling"></i> <span id="calmTitle">Calm Zone — Anxiety Relief Games</span></div>
+          <button id="closeCalm" style="width:auto;padding:8px 12px;background:#ff6961"><i class="fa-solid fa-xmark"></i> Close</button>
+        </div>
+        
+        <div class="tabs">
+          <button class="active" data-tab="breathTab"><i class="fa-solid fa-wind"></i> Breathing</button>
+          <button data-tab="groundTab"><i class="fa-solid fa-mountain-sun"></i> Grounding</button>
+          <button data-tab="doodleTab"><i class="fa-solid fa-pen"></i> Doodle</button>
+          <button data-tab="bubbleTab"><i class="fa-solid fa-water"></i> Bubbles</button>
+          <button data-tab="memoryTab"><i class="fa-solid fa-cards"></i> Memory</button>
+          <span class="streak" id="streakDisplay"><i class="fa-solid fa-fire"></i> <span id="streakCount">0</span> day streak</span>
+        </div>
+
+        <!-- Game 1: Box Breathing Coach -->
+        <section id="breathTab" class="game active">
+          <div class="breath-container">
+            <div class="circle-wrap">
+              <div class="circle-progress" id="circleProgress">
+                <div class="circle" id="breathCircle">
+                  <div id="breathText">Ready</div>
+                </div>
+              </div>
+            </div>
+            <div class="breath-stage" id="breathStage">Ready? Press Start</div>
+            <div class="stats">
+              <span>Cycle: <b id="cycle">0</b></span> • 
+              <span>Timer: <b id="timer">00:00</b></span> •
+              <span>Total: <b id="totalTime">00:00</b></span>
+            </div>
+            <div class="toolbar" style="justify-content:center">
+              <button id="breathStart" style="width:auto"><i class="fa-solid fa-play"></i> Start</button>
+              <button id="breathStop" style="width:auto;background:#b3c6ff"><i class="fa-solid fa-pause"></i> Pause</button>
+              <label class="pill" style="cursor:pointer"><i class="fa-solid fa-gauge"></i>
+                <select id="pace" style="border:none;background:transparent;font-weight:700">
+                  <option value="3">3-3-3-3</option>
+                  <option value="4" selected>4-4-4-4</option>
+                  <option value="5">5-5-5-5</option>
+                  <option value="6">6-6-6-6</option>
+                </select>
+              </label>
+            </div>
+            <div class="sound-controls">
+              <span>Sound: </span>
+              <button class="sound-toggle active" data-sound="none">None</button>
+              <button class="sound-toggle" data-sound="bell">Bell</button>
+              <button class="sound-toggle" data-sound="tone">Tone</button>
+            </div>
+          </div>
+          <p class="muted" style="text-align:center">Tip: Saans <b>andar</b> (Inhale) → <b>roko</b> (Hold) → Saans <b>bahar</b> (Exhale) → <b>roko</b> (Hold). 3–5 minutes.</p>
+        </section>
+
+        <!-- Game 2: 5-4-3-2-1 Grounding -->
+        <section id="groundTab" class="game">
+          <div class="progress-bar" style="margin-bottom: 16px;">
+            <div class="progress" id="groundProgress" style="width: 0%"></div>
+          </div>
+          
+          <div class="grounding-step">
+            <h4><i class="fa-solid fa-eye"></i> 5 cheezein <span class="muted">(dekho)</span> <span class="badge" id="seeBadge">0/5</span></h4>
+            <div class="chips" id="see"></div>
+          </div>
+          <div class="grounding-step">
+            <h4><i class="fa-solid fa-hand"></i> 4 cheezein <span class="muted">(chhoo sakte ho)</span> <span class="badge" id="touchBadge">0/4</span></h4>
+            <div class="chips" id="touch"></div>
+          </div>
+          <div class="grounding-step">
+            <h4><i class="fa-solid fa-ear-listen"></i> 3 awaazein <span class="muted">(sun rahe ho)</span> <span class="badge" id="hearBadge">0/3</span></h4>
+            <div class="chips" id="hear"></div>
+          </div>
+          <div class="grounding-step">
+            <h4><i class="fa-solid fa-wind"></i> 2 cheezein <span class="muted">(sugandh/ smell)</span> <span class="badge" id="smellBadge">0/2</span></h4>
+            <div class="chips" id="smell"></div>
+          </div>
+          <div class="grounding-step">
+            <h4><i class="fa-solid fa-mug-hot"></i> 1 cheez <span class="muted">(taste)</span> <span class="badge" id="tasteBadge">0/1</span></h4>
+            <div class="chips" id="taste"></div>
+          </div>
+          
+          <div class="toolbar">
+            <input id="groundInput" placeholder="Type something you can sense & press Enter…" style="flex:1;padding:10px;border-radius:10px;border:1px solid #e5e7eb" />
+            <button id="groundReset" style="width:auto;background:#b3c6ff"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button id="groundComplete" style="width:auto;background:#5cb85c;display:none"><i class="fa-solid fa-check"></i> Complete!</button>
+          </div>
+          <p class="muted">Har entry ek chip banegi. Pehle 5 chips <b>see</b> mein, agle 4 <b>touch</b> mein… is tarah se. Jab sab bhar jayen, aap complete ho!</p>
+        </section>
+
+        <!-- Game 3: Doodle Pad (mindful drawing) -->
+        <section id="doodleTab" class="game">
+          <div class="doodle-container">
+            <div class="toolbar">
+              <label class="pill"><i class="fa-solid fa-sliders"></i>&nbsp;Size <input type="range" id="size" min="2" max="18" value="6" /></label>
+              <label class="pill"><input type="color" id="color" value="#1f2937" style="border:none;background:transparent;width:26px;height:26px" /> Color</label>
+              <button id="undo" style="width:auto;background:#6c757d" disabled><i class="fa-solid fa-undo"></i> Undo</button>
+              <button id="redo" style="width:auto;background:#6c757d" disabled><i class="fa-solid fa-redo"></i> Redo</button>
+              <button id="clear" style="width:auto;background:#ffb347"><i class="fa-solid fa-eraser"></i> Clear</button>
+              <button id="save" style="width:auto"><i class="fa-solid fa-download"></i> Save</button>
+            </div>
+            
+            <div class="toolbar">
+              <label class="pill"><i class="fa-solid fa-image"></i> Template
+                <select id="template" style="border:none;background:transparent;font-weight:700">
+                  <option value="none">None</option>
+                  <option value="mandala">Mandala</option>
+                  <option value="waves">Waves</option>
+                  <option value="pattern">Pattern</option>
+                </select>
+              </label>
+              
+              <div class="sound-controls">
+                <span>Ambient Sound: </span>
+                <button class="sound-toggle active" data-sound="none">None</button>
+                <button class="sound-toggle" data-sound="rain">Rain</button>
+                <button class="sound-toggle" data-sound="forest">Forest</button>
+              </div>
+            </div>
+            
+            <canvas id="doodle"></canvas>
+          </div>
+          <p class="muted">Slow lines, gentle curves. Focus on movement & breath. 💙</p>
+        </section>
+
+        <!-- Game 4: Bubble Popper -->
+        <section id="bubbleTab" class="game">
+          <div class="bubble-container">
+            <canvas id="bubbleCanvas"></canvas>
+            <div class="bubble-stats">
+              <div class="bubble-stat">Bubbles: <span id="bubbleCount">0</span></div>
+              <div class="bubble-stat">Time: <span id="bubbleTimer">00:00</span></div>
+            </div>
+            <div class="toolbar" style="justify-content:center">
+              <button id="bubbleStart" style="width:auto"><i class="fa-solid fa-play"></i> Start</button>
+              <button id="bubbleReset" style="width:auto;background:#b3c6ff"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            </div>
+          </div>
+          <p class="muted">Click or tap on bubbles to pop them. Focus on the satisfying feeling of release. 🫧</p>
+        </section>
+
+        <!-- Game 5: Memory Cards -->
+        <section id="memoryTab" class="game">
+          <div class="memory-container">
+            <div class="memory-stats">
+              <div class="bubble-stat">Moves: <span id="moveCount">0</span></div>
+              <div class="bubble-stat">Pairs: <span id="pairCount">0/8</span></div>
+            </div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <div class="toolbar" style="justify-content:center; margin-top:16px">
+              <button id="memoryStart" style="width:auto"><i class="fa-solid fa-play"></i> New Game</button>
+            </div>
+          </div>
+          <p class="muted">Find matching pairs. This game helps improve focus and memory. 🧠</p>
+        </section>
       </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
-      // Particle background animation
-      const canvas = document.getElementById("particles-bg");
-      const ctx = canvas.getContext("2d");
-      let particles = [];
-      const particleCount = 48;
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      window.addEventListener("resize", resizeCanvas);
-      resizeCanvas();
-
-      function randomColor() {
-        const colors = [
-          "#74ebd5",
-          "#007bff",
-          "#b3c6ff",
-          "#ffb347",
-          "#ff6961",
-          "#e0e7ff",
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-      }
-      function createParticles() {
-        particles = [];
-        for (let i = 0; i < particleCount; i++) {
-          particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: 1.5 + Math.random() * 2.5,
-            dx: -0.5 + Math.random(),
-            dy: -0.5 + Math.random(),
-            color: randomColor(),
-            alpha: 0.4 + Math.random() * 0.5,
-          });
+      // ========== Audio Context and Sound Functions ==========
+      let audioContext = null;
+      let currentBackgroundSound = null;
+      
+      // Initialize audio context on first user interaction
+      function initAudio() {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          console.log("Audio context initialized");
         }
       }
-      function drawParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let p of particles) {
-          ctx.globalAlpha = p.alpha;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-          ctx.fillStyle = p.color;
-          ctx.fill();
+      
+      // Play a simple tone
+      function playTone(frequency, duration, type = 'sine') {
+        if (!audioContext) initAudio();
+        
+        try {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.type = type;
+          oscillator.frequency.value = frequency;
+          
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + duration);
+        } catch (e) {
+          console.error("Error playing tone:", e);
         }
-        ctx.globalAlpha = 1;
       }
-      function updateParticles() {
-        for (let p of particles) {
-          p.x += p.dx;
-          p.y += p.dy;
-          if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-          if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-        }
+      
+      // Play bell sound
+      function playBell() {
+        playTone(392, 0.5, 'sine'); // G4
+        setTimeout(() => playTone(523, 0.8, 'sine'), 100); // C5
       }
-      function animateParticles() {
-        updateParticles();
-        drawParticles();
-        requestAnimationFrame(animateParticles);
-      }
-      createParticles();
-      animateParticles();
-      window.addEventListener("resize", () => {
-        resizeCanvas();
-        createParticles();
-      });
-
-      // Progress bar update
-      const form = document.getElementById("gad7Form");
-      const progress = document.getElementById("progress");
-      form.addEventListener("change", () => {
-        let answered = 0;
-        for (let i = 1; i <= 7; i++) {
-          const radios = document.getElementsByName("q" + i);
-          for (let r of radios) if (r.checked) answered++;
-        }
-        progress.style.width = (answered / 7) * 100 + "%";
-        // Highlight selected label
-        for (let i = 1; i <= 7; i++) {
-          const radios = document.getElementsByName("q" + i);
-          for (let r of radios) {
-            if (r.checked) r.parentElement.classList.add("selected");
-            else r.parentElement.classList.remove("selected");
+      
+      // Play background sound
+      function playBackgroundSound(type) {
+        stopBackgroundSound();
+        
+        if (type === 'none' || !audioContext) return;
+        
+        try {
+          if (type === 'rain') {
+            // Create rain sound with noise and occasional droplets
+            const rainGain = audioContext.createGain();
+            rainGain.gain.value = 0.1;
+            
+            // Brown noise for rain
+            const noise = audioContext.createScriptProcessor(4096, 1, 1);
+            noise.onaudioprocess = function(e) {
+              const output = e.outputBuffer.getChannelData(0);
+              for (let i = 0; i < 4096; i++) {
+                output[i] = (Math.random() * 2 - 1) * 0.5;
+              }
+            };
+            
+            noise.connect(rainGain);
+            rainGain.connect(audioContext.destination);
+            
+            // Occasional droplet sounds
+            setInterval(() => {
+              if (Math.random() > 0.7) {
+                playTone(100 + Math.random() * 500, 0.2, 'sine');
+              }
+            }, 800);
+            
+            currentBackgroundSound = { noise, gain: rainGain, interval: setInterval };
+            
+          } else if (type === 'forest') {
+            // Forest sounds with occasional birds
+            const forestGain = audioContext.createGain();
+            forestGain.gain.value = 0.08;
+            
+            // Gentle wind-like noise
+            const noise = audioContext.createScriptProcessor(4096, 1, 1);
+            noise.onaudioprocess = function(e) {
+              const output = e.outputBuffer.getChannelData(0);
+              for (let i = 0; i < 4096; i++) {
+                output[i] = (Math.random() * 2 - 1) * 0.3;
+              }
+            };
+            
+            noise.connect(forestGain);
+            forestGain.connect(audioContext.destination);
+            
+            // Occasional bird sounds
+            const birdInterval = setInterval(() => {
+              if (Math.random() > 0.6) {
+                playTone(800 + Math.random() * 800, 0.3, 'sine');
+              }
+            }, 1200);
+            
+            currentBackgroundSound = { noise, gain: forestGain, interval: birdInterval };
           }
+        } catch (e) {
+          console.error("Error playing background sound:", e);
         }
-      });
-
-      // Confetti effect
-      function launchConfetti() {
-        const confetti = document.getElementById("confetti");
-        confetti.innerHTML = "";
-        const colors = [
-          "#007bff",
-          "#74ebd5",
-          "#ffb347",
-          "#ff6961",
-          "#b3c6ff",
-          "#e0e7ff",
-        ];
-        for (let i = 0; i < 32; i++) {
-          const piece = document.createElement("div");
-          piece.className = "confetti-piece";
-          piece.style.left = Math.random() * 100 + "%";
-          piece.style.background =
-            colors[Math.floor(Math.random() * colors.length)];
-          piece.style.transform = `rotateZ(${Math.random() * 360}deg)`;
-          piece.style.animationDelay = Math.random() * 0.7 + "s";
-          confetti.appendChild(piece);
-        }
-        setTimeout(() => (confetti.innerHTML = ""), 2000);
       }
-
-      function calculateResult() {
-        // Get user name
-        const userName = document.getElementById("userName").value.trim();
-        if (!userName) {
-          alert("Please enter your name before submitting the test.");
-          document.getElementById("userName").focus();
-          return;
-        }
-
-        let total = 0;
-        for (let i = 1; i <= 7; i++) {
-          let radios = document.getElementsByName("q" + i);
-          let answered = false;
-          for (let r of radios) {
-            if (r.checked) {
-              total += parseInt(r.value);
-              answered = true;
+      
+      // Stop background sound
+      function stopBackgroundSound() {
+        if (currentBackgroundSound) {
+          try {
+            if (currentBackgroundSound.noise) {
+              currentBackgroundSound.noise.disconnect();
             }
+            if (currentBackgroundSound.gain) {
+              currentBackgroundSound.gain.disconnect();
+            }
+            if (currentBackgroundSound.interval) {
+              clearInterval(currentBackgroundSound.interval);
+            }
+          } catch (e) {
+            console.error("Error stopping sound:", e);
           }
-          if (!answered) {
-            alert("Kripya Question " + i + " ka answer dein.");
-            return;
-          }
+          currentBackgroundSound = null;
         }
-        let level = "";
-        let emoji = "";
-        let suggestion = "";
-        if (total <= 4) {
-          level = "Minimal Anxiety";
-          emoji = "😊";
-          suggestion =
-            "Aapka anxiety level bahut kam hai. Apne aap ko healthy rakhne ki aadatein jaari rakhein!";
-        } else if (total <= 9) {
-          level = "Mild Anxiety";
-          emoji = "🙂";
-          suggestion =
-            "Thoda anxiety hai, lekin chinta ki baat nahi. Dhyan, yoga, ya apne dosto se baat karna madadgar ho sakta hai.";
-        } else if (total <= 14) {
-          level = "Moderate Anxiety";
-          emoji = "😟";
-          suggestion =
-            "Aapko moderate anxiety hai. Apne parivaar ya kisi counselor se baat karna upyogi ho sakta hai.";
-        } else {
-          level = "Severe Anxiety";
-          emoji = "😰";
-          suggestion =
-            "Aapko severe anxiety hai. Kripya mental health professional se sampark karein.";
-        }
+      }
+      
+      // ========== Form + Progress ==========
+      const form = document.getElementById('gad7Form');
+      const progress = document.getElementById('progress');
+      const resultBox = document.getElementById('result');
+      const shareBtn = document.getElementById('shareBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const retakeBtn = document.getElementById('retakeBtn');
 
-        const resultBox = document.getElementById("result");
-        resultBox.innerHTML = `<div style="font-size:18px;margin-bottom:10px;color:#007bff;"><b>Name:</b> ${userName}</div>
+      form.addEventListener('change', () => {
+        let answered = 0;
+        for (let i=1;i<=7;i++) {
+          const radios = document.getElementsByName('q'+i);
+          for (const r of radios) if (r.checked) answered++;
+          // selection highlight
+          for (const r of radios) r.parentElement.classList.toggle('selected', r.checked);
+        }
+        progress.style.width = (answered/7)*100 + '%';
+      });
+
+      function calculate() {
+        const name = document.getElementById('userName').value.trim();
+        if (!name) { alert('Please enter your name.'); return; }
+        let total = 0;
+        for (let i=1;i<=7;i++) {
+          const radios = document.getElementsByName('q'+i);
+          const sel = [...radios].find(r=>r.checked);
+          if (!sel) { alert('Kripya Question '+i+' ka answer dein.'); return; }
+          total += parseInt(sel.value);
+        }
+        let level, emoji, suggestion;
+        if (total <= 4){ level='Minimal Anxiety'; emoji='😊'; suggestion='Healthy habits jaari rakhein.' }
+        else if (total <= 9){ level='Mild Anxiety'; emoji='🙂'; suggestion='Dhyaan, yoga, walk, ya doston se baat.' }
+        else if (total <= 14){ level='Moderate Anxiety'; emoji='😟'; suggestion='Counselor/ trusted person se baat karna upyogi.' }
+        else { level='Severe Anxiety'; emoji='😰'; suggestion='Mental health professional se sampark karein.' }
+
+        resultBox.innerHTML = `<div style="font-size:18px;margin-bottom:10px;color:#007bff"><b>Name:</b> ${name}</div>
         <span class="score">Total Score: <b>${total}/21</b></span>
         <span class="level">Result: <b>${level} ${emoji}</b></span>
-        <div class="suggestion">${suggestion}</div>`;
-        resultBox.classList.add("show");
-        launchConfetti();
-
-        // Show share, download, and retake buttons
-        document.getElementById("shareBtn").classList.add("show");
-        document.getElementById("downloadBtn").style.display = "block";
-        document.getElementById("retakeBtn").style.display = "block";
-        // Store result for sharing
-        window._shareText = `GAD-7 Anxiety Test Result for ${userName}:\nTotal Score: ${total}/21\nLevel: ${level} ${emoji}\n${suggestion}`;
+        <div class="suggestion">${suggestion}</div>
+        <div style="margin-top:10px;font-weight:600">Try the <span style="color:#2563eb">Calm Zone</span> (bottom-right) for instant relief 💙</div>`;
+        resultBox.classList.add('show');
+        shareBtn.style.display='block';
+        downloadBtn.style.display='block';
+        retakeBtn.style.display='block';
+        window._shareText = `GAD-7 Anxiety Test Result for ${name}:\nTotal Score: ${total}/21\nLevel: ${level} ${emoji}\n${suggestion}`;
       }
 
-      // Download result as image using html2canvas
-      function downloadResultAsImage() {
-        const resultBox = document.getElementById("result");
-        html2canvas(resultBox, { backgroundColor: null }).then(function (
-          canvas
-        ) {
-          const link = document.createElement("a");
-          link.download = "GAD7_Result.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
+      document.getElementById('submitBtn').addEventListener('click', calculate);
+      shareBtn.addEventListener('click', () => {
+        const shareText = window._shareText || 'I just took the GAD-7 Anxiety Test!';
+        if (navigator.share) navigator.share({title:'My GAD-7 Result', text:shareText, url:location.href}).catch(()=>{});
+        else { navigator.clipboard?.writeText(shareText); alert('Result copied!'); }
+      });
+      downloadBtn.addEventListener('click', () => {
+        html2canvas(resultBox, {backgroundColor:null}).then(c=>{ const a=document.createElement('a'); a.download='GAD7_Result.png'; a.href=c.toDataURL('image/png'); a.click(); });
+      });
+      retakeBtn.addEventListener('click', () => {
+        form.reset(); progress.style.width='0%';
+        for (let i=1;i<=7;i++){ const radios=document.getElementsByName('q'+i); for (const r of radios) r.parentElement.classList.remove('selected'); }
+        resultBox.classList.remove('show'); shareBtn.style.display='none'; downloadBtn.style.display='none'; retakeBtn.style.display='none';
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+
+      // ========== Calm Zone Modal ===========
+      const calmModal = document.getElementById('calmModal');
+      document.getElementById('openCalm').addEventListener('click', ()=> {
+        calmModal.classList.add('show');
+        initAudio(); // Initialize audio when Calm Zone is opened
+      });
+      document.getElementById('closeCalm').addEventListener('click', ()=> {
+        calmModal.classList.remove('show');
+        stopBackgroundSound();
+        // Stop any running games
+        clearInterval(breathTimer);
+        stopBubbleGame();
+      });
+      calmModal.addEventListener('click', (e)=>{ 
+        if (e.target===calmModal) {
+          calmModal.classList.remove('show');
+          stopBackgroundSound();
+          // Stop any running games
+          clearInterval(breathTimer);
+          stopBubbleGame();
+        }
+      });
+
+      // Tabs
+      document.querySelectorAll('.tabs button').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+          document.querySelectorAll('.game').forEach(g=>g.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(btn.dataset.tab).classList.add('active');
+          
+          // Stop sounds when switching tabs
+          stopBackgroundSound();
+          
+          // Initialize the game if it's the first time
+          if (btn.dataset.tab === 'bubbleTab' && !window.bubbleGameInitialized) {
+            initBubbleGame();
+            window.bubbleGameInitialized = true;
+          } else if (btn.dataset.tab === 'memoryTab' && !window.memoryGameInitialized) {
+            initMemoryGame();
+            window.memoryGameInitialized = true;
+          } else if (btn.dataset.tab === 'doodleTab' && !window.doodleInitialized) {
+            initDoodle();
+            window.doodleInitialized = true;
+          }
+        });
+      });
+
+      // Sound toggle buttons
+      document.querySelectorAll('.sound-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const container = btn.closest('.game');
+          container.querySelectorAll('.sound-toggle').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          const soundType = btn.dataset.sound;
+          
+          if (container.id === 'breathTab') {
+            window.breathSoundType = soundType;
+          } else if (container.id === 'doodleTab') {
+            playBackgroundSound(soundType);
+          }
+        });
+      });
+
+      // ========== Game 1: Box Breathing ==========
+      let breathTimer=null, stageIdx=0, cycle=0, seconds=0, totalSeconds=0;
+      const stages=['Inhale','Hold','Exhale','Hold'];
+      const circle=document.getElementById('breathCircle');
+      const circleProgress=document.getElementById('circleProgress');
+      const breathText=document.getElementById('breathText');
+      const stageEl=document.getElementById('breathStage');
+      const cycleEl=document.getElementById('cycle');
+      const timerEl=document.getElementById('timer');
+      const totalTimeEl=document.getElementById('totalTime');
+      const paceSel=document.getElementById('pace');
+      
+      // Set default sound type
+      window.breathSoundType = 'none';
+
+      function fmtTime(s){ const m=Math.floor(s/60).toString().padStart(2,'0'); const ss=(s%60).toString().padStart(2,'0'); return `${m}:${ss}` }
+
+      function runBreath(){
+        const dur = parseInt(paceSel.value);
+        let t = 0;
+        clearInterval(breathTimer);
+        stageIdx = 0; seconds = 0; cycle = 0; 
+        cycleEl.textContent = '0'; 
+        timerEl.textContent='00:00';
+        totalTimeEl.textContent = '00:00';
+        totalSeconds = 0;
+        
+        // Update progress circle
+        updateCircleProgress(0);
+        breathText.textContent = 'Ready';
+        stageEl.textContent = 'Get ready…';
+        
+        breathTimer = setInterval(()=>{
+          seconds++; 
+          totalSeconds++;
+          timerEl.textContent = fmtTime(seconds);
+          totalTimeEl.textContent = fmtTime(totalSeconds);
+          
+          // Update progress circle (0 to 360 degrees)
+          const progress = (t / dur) * 90; // 90 degrees per stage (360/4)
+          updateCircleProgress(stageIdx * 90 + progress);
+          
+          // Update text and animation
+          breathText.textContent = `${dur - t}s`;
+          
+          if (stages[stageIdx] === 'Inhale') {
+            circle.style.transform = 'scale(1.15)';
+            if (t === 0) playBreathSound('inhale');
+          } else if (stages[stageIdx] === 'Exhale') {
+            circle.style.transform = 'scale(0.9)';
+            if (t === 0) playBreathSound('exhale');
+          } else {
+            circle.style.transform = 'scale(1.02)';
+          }
+          
+          stageEl.innerHTML = `<b>${stages[stageIdx]}</b> — ${dur-t}s`;
+          
+          t++;
+          if (t > dur){ 
+            t = 0; 
+            stageIdx = (stageIdx+1) % 4; 
+            if (stageIdx === 0){ 
+              cycle++; 
+              cycleEl.textContent = cycle; 
+              if (cycle % 3 === 0) {
+                playBreathSound('complete');
+              }
+            } 
+          }
+        }, 1000);
+      }
+      
+      function playBreathSound(type) {
+        if (window.breathSoundType === 'none') return;
+        
+        if (window.breathSoundType === 'bell') {
+          if (type === 'inhale') {
+            playBell();
+          } else if (type === 'exhale') {
+            setTimeout(() => playBell(), 300);
+          } else if (type === 'complete') {
+            playBell();
+            setTimeout(() => playTone(523, 0.5), 200);
+            setTimeout(() => playTone(659, 0.8), 400);
+          }
+        } else if (window.breathSoundType === 'tone') {
+          if (type === 'inhale') {
+            playTone(392, 1.0); // G4
+          } else if (type === 'exhale') {
+            playTone(330, 1.0); // E4
+          } else if (type === 'complete') {
+            playTone(523, 0.5); // C5
+            setTimeout(() => playTone(659, 0.8), 300); // E5
+          }
+        }
+      }
+      
+      function updateCircleProgress(degrees) {
+        circleProgress.style.background = `conic-gradient(var(--secondary) ${degrees}deg, #e5e7eb ${degrees}deg)`;
+      }
+      
+      document.getElementById('breathStart').addEventListener('click', () => {
+        initAudio();
+        runBreath();
+      });
+      
+      document.getElementById('breathStop').addEventListener('click', ()=>{ 
+        clearInterval(breathTimer); 
+        stageEl.textContent='Paused'; 
+        breathText.textContent = 'Paused';
+      });
+
+      // ========== Game 2: 5-4-3-2-1 Grounding ==========
+      const buckets=[
+        {id:'see', max:5, badge: 'seeBadge'},
+        {id:'touch', max:4, badge: 'touchBadge'},
+        {id:'hear', max:3, badge: 'hearBadge'},
+        {id:'smell', max:2, badge: 'smellBadge'},
+        {id:'taste', max:1, badge: 'tasteBadge'}
+      ];
+      const groundInput=document.getElementById('groundInput');
+      const groundProgress = document.getElementById('groundProgress');
+      const groundCompleteBtn = document.getElementById('groundComplete');
+      
+      function nextBucket(){ 
+        return buckets.find(b => {
+          const el = document.getElementById(b.id);
+          return el.children.length < b.max;
+        }); 
+      }
+      
+      function updateGroundingProgress() {
+        let totalItems = 0;
+        let completedItems = 0;
+        
+        buckets.forEach(b => {
+          const count = document.getElementById(b.id).children.length;
+          completedItems += count;
+          totalItems += b.max;
+          
+          // Update badge
+          document.getElementById(b.badge).textContent = `${count}/${b.max}`;
+        });
+        
+        const progressPercent = (completedItems / totalItems) * 100;
+        groundProgress.style.width = `${progressPercent}%`;
+        
+        // Show complete button if all items are filled
+        if (completedItems >= totalItems) {
+          groundCompleteBtn.style.display = 'block';
+          updateStreak();
+          playTone(523, 0.3);
+          setTimeout(() => playTone(659, 0.5), 200);
+        } else {
+          groundCompleteBtn.style.display = 'none';
+        }
+      }
+      
+      function addChip(text){
+        const b = nextBucket(); 
+        if (!b) { 
+          return; 
+        }
+        
+        const chip=document.createElement('span'); 
+        chip.className='chip'; 
+        chip.textContent=text; 
+        chip.title='Click to remove';
+        chip.addEventListener('click', ()=> {
+          chip.remove();
+          updateGroundingProgress();
+        });
+        
+        document.getElementById(b.id).appendChild(chip);
+        updateGroundingProgress();
+        playTone(262 + Math.random() * 200, 0.2); // Random note for adding chip
+      }
+      
+      groundInput.addEventListener('keydown', (e)=>{
+        if (e.key==='Enter') { 
+          e.preventDefault(); 
+          const v=groundInput.value.trim(); 
+          if (v){ 
+            addChip(v); 
+            groundInput.value=''; 
+          } 
+        }
+      });
+      
+      document.getElementById('groundReset').addEventListener('click', ()=>{
+        buckets.forEach(b=> {
+          document.getElementById(b.id).innerHTML='';
+          document.getElementById(b.badge).textContent = `0/${b.max}`;
+        });
+        groundProgress.style.width = '0%';
+        groundCompleteBtn.style.display = 'none';
+        playTone(196, 0.3); // Low note for reset
+      });
+      
+      groundCompleteBtn.addEventListener('click', () => {
+        alert('Congratulations! You completed the grounding exercise. 🌟');
+        updateStreak();
+        playTone(523, 0.2);
+        setTimeout(() => playTone(659, 0.3), 100);
+        setTimeout(() => playTone(784, 0.5), 200);
+      });
+      
+      // ========== Game 3: Doodle Pad ==========
+      const canvasD = document.getElementById('doodle');
+      const ctx = canvasD.getContext('2d');
+      const undoBtn = document.getElementById('undo');
+      const redoBtn = document.getElementById('redo');
+      const templateSel = document.getElementById('template');
+      
+      let drawing=false, lastX=0, lastY=0;
+      let drawingHistory = [];
+      let historyIndex = -1;
+      const sizeEl=document.getElementById('size');
+      const colorEl=document.getElementById('color');
+      
+      function resizeCanvas(){ 
+        canvasD.width = canvasD.clientWidth; 
+        canvasD.height = canvasD.clientHeight; 
+        redrawCanvas();
+      }
+      
+      function redrawCanvas() {
+        if (historyIndex >= 0 && drawingHistory.length > 0) {
+          const img = new Image();
+          img.onload = function() {
+            ctx.clearRect(0, 0, canvasD.width, canvasD.height);
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = drawingHistory[historyIndex];
+        } else {
+          ctx.clearRect(0, 0, canvasD.width, canvasD.height);
+          drawTemplate();
+        }
+      }
+      
+      function drawTemplate() {
+        const template = templateSel.value;
+        if (template === 'none') return;
+        
+        ctx.save();
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 1;
+        
+        if (template === 'mandala') {
+          // Draw a simple mandala pattern
+          const centerX = canvasD.width / 2;
+          const centerY = canvasD.height / 2;
+          const maxRadius = Math.min(centerX, centerY) - 10;
+          
+          for (let r = 20; r < maxRadius; r += 20) {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          
+          for (let i = 0; i < 8; i++) {
+            const angle = (Math.PI * 2 * i) / 8;
+            const x2 = centerX + Math.cos(angle) * maxRadius;
+            const y2 = centerY + Math.sin(angle) * maxRadius;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+          }
+        } else if (template === 'waves') {
+          // Draw wave patterns
+          ctx.beginPath();
+          for (let x = 0; x < canvasD.width; x += 20) {
+            const y = canvasD.height / 2 + Math.sin(x / 30) * 20;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+          
+          ctx.beginPath();
+          for (let x = 0; x < canvasD.width; x += 20) {
+            const y = canvasD.height / 3 + Math.cos(x / 40) * 15;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        } else if (template === 'pattern') {
+          // Draw a simple pattern
+          for (let x = 0; x < canvasD.width; x += 30) {
+            for (let y = 0; y < canvasD.height; y += 30) {
+              ctx.beginPath();
+              ctx.arc(x, y, 5, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+        }
+        
+        ctx.restore();
+      }
+      
+      function saveState() {
+        // Remove any future states from current position
+        if (historyIndex < drawingHistory.length - 1) {
+          drawingHistory = drawingHistory.slice(0, historyIndex + 1);
+        }
+        
+        // Save current state
+        drawingHistory.push(canvasD.toDataURL());
+        historyIndex = drawingHistory.length - 1;
+        
+        // Update button states
+        undoBtn.disabled = historyIndex <= 0;
+        redoBtn.disabled = true;
+      }
+      
+      function startDraw(x,y){ 
+        drawing=true; 
+        lastX=x; 
+        lastY=y; 
+        
+        // Save state before drawing
+        saveState();
+      }
+      
+      function draw(x,y){ 
+        if(!drawing) return; 
+        ctx.lineWidth=parseInt(sizeEl.value); 
+        ctx.lineCap='round'; 
+        ctx.strokeStyle=colorEl.value; 
+        ctx.beginPath(); 
+        ctx.moveTo(lastX,lastY); 
+        ctx.lineTo(x,y); 
+        ctx.stroke(); 
+        lastX=x; 
+        lastY=y; 
+      }
+      
+      function stopDraw(){ 
+        drawing=false; 
+      }
+      
+      // Set up event listeners for doodle pad
+      function initDoodle() {
+        resizeCanvas();
+        
+        canvasD.addEventListener('mousedown', e=> startDraw(e.offsetX,e.offsetY));
+        canvasD.addEventListener('mousemove', e=> draw(e.offsetX,e.offsetY));
+        window.addEventListener('mouseup', stopDraw);
+        
+        // touch
+        canvasD.addEventListener('touchstart', e=>{ 
+          const r=canvasD.getBoundingClientRect(); 
+          const t=e.touches[0]; 
+          startDraw(t.clientX-r.left, t.clientY-r.top); 
+        });
+        canvasD.addEventListener('touchmove', e=>{ 
+          e.preventDefault(); 
+          const r=canvasD.getBoundingClientRect(); 
+          const t=e.touches[0]; 
+          draw(t.clientX-r.left, t.clientY-r.top); 
+        }, {passive:false});
+        canvasD.addEventListener('touchend', stopDraw);
+        
+        // Undo/Redo functionality
+        undoBtn.addEventListener('click', () => {
+          if (historyIndex > 0) {
+            historyIndex--;
+            redrawCanvas();
+            undoBtn.disabled = historyIndex <= 0;
+            redoBtn.disabled = false;
+            playTone(196, 0.1); // Low note for undo
+          }
+        });
+        
+        redoBtn.addEventListener('click', () => {
+          if (historyIndex < drawingHistory.length - 1) {
+            historyIndex++;
+            redrawCanvas();
+            redoBtn.disabled = historyIndex >= drawingHistory.length - 1;
+            undoBtn.disabled = false;
+            playTone(523, 0.1); // High note for redo
+          }
+        });
+        
+        // Template change
+        templateSel.addEventListener('change', () => {
+          saveState();
+          redrawCanvas();
         });
       }
-
-      // Retake Test logic
-      function retakeTest() {
-        // Reset form
-        document.getElementById("gad7Form").reset();
-        // Reset progress bar
-        document.getElementById("progress").style.width = "0%";
-        // Remove selected label highlight
-        for (let i = 1; i <= 7; i++) {
-          const radios = document.getElementsByName("q" + i);
-          for (let r of radios) {
-            r.parentElement.classList.remove("selected");
+      
+      document.getElementById('clear').addEventListener('click', ()=> {
+        saveState();
+        ctx.clearRect(0,0,canvasD.width,canvasD.height);
+        drawTemplate();
+        playTone(330, 0.3); // Mid note for clear
+      });
+      
+      document.getElementById('save').addEventListener('click', ()=>{
+        html2canvas(canvasD).then(c=>{ 
+          const a=document.createElement('a'); 
+          a.download='mindful_doodle.png'; 
+          a.href=c.toDataURL('image/png'); 
+          a.click(); 
+        });
+        playTone(523, 0.2); // Success note for save
+        setTimeout(() => playTone(659, 0.3), 100);
+      });
+      
+      window.addEventListener('resize', resizeCanvas);
+      
+      // Initialize doodle pad when the tab is activated
+      document.querySelector('[data-tab="doodleTab"]').addEventListener('click', initDoodle);
+      
+      // ========== Game 4: Bubble Popper ==========
+      const bubbleCanvas = document.getElementById('bubbleCanvas');
+      const bubbleCtx = bubbleCanvas.getContext('2d');
+      const bubbleCountEl = document.getElementById('bubbleCount');
+      const bubbleTimerEl = document.getElementById('bubbleTimer');
+      let bubbleGameInterval = null;
+      let bubbleTimer = 0;
+      let bubbles = [];
+      let poppedCount = 0;
+      
+      function initBubbleGame() {
+        // Set canvas size
+        bubbleCanvas.width = bubbleCanvas.clientWidth;
+        bubbleCanvas.height = bubbleCanvas.clientHeight;
+        
+        // Add event listeners
+        bubbleCanvas.addEventListener('click', handleBubbleClick);
+        bubbleCanvas.addEventListener('touchstart', handleBubbleTouch);
+        
+        document.getElementById('bubbleStart').addEventListener('click', startBubbleGame);
+        document.getElementById('bubbleReset').addEventListener('click', resetBubbleGame);
+      }
+      
+      function startBubbleGame() {
+        resetBubbleGame();
+        bubbleGameInterval = setInterval(updateBubbles, 50);
+        
+        // Start timer
+        const startTime = Date.now();
+        setInterval(() => {
+          bubbleTimer = Math.floor((Date.now() - startTime) / 1000);
+          bubbleTimerEl.textContent = fmtTime(bubbleTimer);
+        }, 1000);
+      }
+      
+      function resetBubbleGame() {
+        bubbles = [];
+        poppedCount = 0;
+        bubbleTimer = 0;
+        bubbleCountEl.textContent = '0';
+        bubbleTimerEl.textContent = '00:00';
+        
+        // Create initial bubbles
+        for (let i = 0; i < 15; i++) {
+          addBubble();
+        }
+        
+        drawBubbles();
+      }
+      
+      function stopBubbleGame() {
+        clearInterval(bubbleGameInterval);
+      }
+      
+      function addBubble() {
+        const size = 15 + Math.random() * 25;
+        const x = Math.random() * (bubbleCanvas.width - size * 2) + size;
+        const y = bubbleCanvas.height + size;
+        const speed = 1 + Math.random() * 3;
+        const color = `hsla(${Math.random() * 360}, 70%, 70%, 0.7)`;
+        
+        bubbles.push({
+          x, y, size, speed, color,
+          popped: false
+        });
+      }
+      
+      function updateBubbles() {
+        // Move bubbles
+        for (let i = 0; i < bubbles.length; i++) {
+          if (!bubbles[i].popped) {
+            bubbles[i].y -= bubbles[i].speed;
+            
+            // If bubble goes off screen, replace it
+            if (bubbles[i].y < -bubbles[i].size * 2) {
+              bubbles[i].popped = true;
+              addBubble();
+            }
           }
         }
-        // Hide result, share, download, and retake buttons
-        document.getElementById("result").classList.remove("show");
-        document.getElementById("shareBtn").classList.remove("show");
-        document.getElementById("downloadBtn").style.display = "none";
-        document.getElementById("retakeBtn").style.display = "none";
-        // Remove confetti
-        document.getElementById("confetti").innerHTML = "";
-        // Scroll to top of form
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        
+        // Occasionally add new bubbles
+        if (Math.random() < 0.05) {
+          addBubble();
+        }
+        
+        drawBubbles();
       }
-
-      // Share button logic
-      function shareResult() {
-        const shareText =
-          window._shareText || "I just took the GAD-7 Anxiety Test!";
-        if (navigator.share) {
-          navigator
-            .share({
-              title: "My GAD-7 Anxiety Test Result",
-              text: shareText,
-              url: window.location.href,
-            })
-            .catch(() => {});
-        } else {
-          // Fallback: copy to clipboard
-          try {
-            navigator.clipboard.writeText(shareText);
-            alert("Result copied! You can now paste it anywhere.");
-          } catch {
-            alert("Copy this result:\n\n" + shareText);
+      
+      function drawBubbles() {
+        // Clear canvas
+        bubbleCtx.clearRect(0, 0, bubbleCanvas.width, bubbleCanvas.height);
+        
+        // Draw each bubble
+        for (let i = 0; i < bubbles.length; i++) {
+          if (!bubbles[i].popped) {
+            const bubble = bubbles[i];
+            
+            // Draw bubble
+            bubbleCtx.beginPath();
+            bubbleCtx.arc(bubble.x, bubble.y, bubble.size, 0, Math.PI * 2);
+            bubbleCtx.fillStyle = bubble.color;
+            bubbleCtx.fill();
+            
+            // Draw highlight
+            bubbleCtx.beginPath();
+            bubbleCtx.arc(bubble.x - bubble.size/3, bubble.y - bubble.size/3, bubble.size/3, 0, Math.PI * 2);
+            bubbleCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            bubbleCtx.fill();
           }
         }
       }
+      
+      function handleBubbleClick(e) {
+        const rect = bubbleCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        checkBubblePop(x, y);
+      }
+      
+      function handleBubbleTouch(e) {
+        e.preventDefault();
+        const rect = bubbleCanvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        checkBubblePop(x, y);
+      }
+      
+      function checkBubblePop(x, y) {
+        for (let i = 0; i < bubbles.length; i++) {
+          if (!bubbles[i].popped) {
+            const bubble = bubbles[i];
+            const distance = Math.sqrt((x - bubble.x) ** 2 + (y - bubble.y) ** 2);
+            
+            if (distance <= bubble.size) {
+              // Pop the bubble
+              bubbles[i].popped = true;
+              poppedCount++;
+              bubbleCountEl.textContent = poppedCount;
+              
+              // Play pop sound
+              playTone(300 + Math.random() * 500, 0.1, 'sine');
+              
+              // Add a new bubble
+              addBubble();
+              break;
+            }
+          }
+        }
+      }
+      
+      // ========== Game 5: Memory Cards ==========
+      const memoryGrid = document.getElementById('memoryGrid');
+      const moveCountEl = document.getElementById('moveCount');
+      const pairCountEl = document.getElementById('pairCount');
+      let memoryCards = [];
+      let flippedCards = [];
+      let matchedPairs = 0;
+      let moveCount = 0;
+      let memoryGameActive = false;
+      
+      function initMemoryGame() {
+        document.getElementById('memoryStart').addEventListener('click', startMemoryGame);
+      }
+      
+      function startMemoryGame() {
+        // Reset game state
+        memoryGrid.innerHTML = '';
+        flippedCards = [];
+        matchedPairs = 0;
+        moveCount = 0;
+        moveCountEl.textContent = '0';
+        pairCountEl.textContent = '0/8';
+        memoryGameActive = true;
+        
+        // Create cards (8 pairs)
+        const symbols = ['🌸', '🌿', '🌊', '🦋', '🦢', '🌙', '⭐', '🍃'];
+        memoryCards = [...symbols, ...symbols];
+        
+        // Shuffle cards
+        for (let i = memoryCards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [memoryCards[i], memoryCards[j]] = [memoryCards[j], memoryCards[i]];
+        }
+        
+        // Create card elements
+        memoryCards.forEach((symbol, index) => {
+          const card = document.createElement('div');
+          card.className = 'memory-card';
+          card.dataset.index = index;
+          card.dataset.symbol = symbol;
+          card.innerHTML = '<div class="card-back">?</div>';
+          
+          card.addEventListener('click', () => {
+            if (memoryGameActive && !card.classList.contains('flipped') && !card.classList.contains('matched') && flippedCards.length < 2) {
+              flipCard(card);
+            }
+          });
+          
+          memoryGrid.appendChild(card);
+        });
+      }
+      
+      function flipCard(card) {
+        card.classList.add('flipped');
+        card.innerHTML = card.dataset.symbol;
+        flippedCards.push(card);
+        
+        if (flippedCards.length === 2) {
+          moveCount++;
+          moveCountEl.textContent = moveCount;
+          
+          // Check for match
+          setTimeout(() => {
+            if (flippedCards[0].dataset.symbol === flippedCards[1].dataset.symbol) {
+              // Match found
+              flippedCards[0].classList.add('matched');
+              flippedCards[1].classList.add('matched');
+              matchedPairs++;
+              pairCountEl.textContent = `${matchedPairs}/8`;
+              
+              // Play success sound
+              playTone(523, 0.2, 'sine');
+              
+              // Check for game completion
+              if (matchedPairs === 8) {
+                memoryGameActive = false;
+                setTimeout(() => {
+                  alert(`Congratulations! You completed the game in ${moveCount} moves!`);
+                }, 500);
+              }
+            } else {
+              // No match
+              flippedCards[0].classList.remove('flipped');
+              flippedCards[1].classList.remove('flipped');
+              flippedCards[0].innerHTML = '<div class="card-back">?</div>';
+              flippedCards[1].innerHTML = '<div class="card-back">?</div>';
+            }
+            
+            flippedCards = [];
+          }, 1000);
+        }
+      }
+      
+      // ========== Streak Counter ==========
+      function updateStreak() {
+        // Get current streak from localStorage or set to 0
+        let streak = parseInt(localStorage.getItem('calmZoneStreak') || '0');
+        
+        // Check if we've already updated today
+        const lastUpdate = localStorage.getItem('calmZoneLastUpdate');
+        const today = new Date().toDateString();
+        
+        if (lastUpdate !== today) {
+          streak++;
+          localStorage.setItem('calmZoneStreak', streak);
+          localStorage.setItem('calmZoneLastUpdate', today);
+        }
+        
+        // Update display
+        document.getElementById('streakCount').textContent = streak;
+        
+        // Add encouragement for streaks
+        const streakDisplay = document.getElementById('streakDisplay');
+        if (streak >= 3) {
+          streakDisplay.style.background = 'linear-gradient(135deg, #ffb347, #ff6961)';
+          streakDisplay.style.color = 'white';
+        }
+      }
+      
+      // Initialize streak counter
+      updateStreak();
     </script>
   </body>
 </html>
-
